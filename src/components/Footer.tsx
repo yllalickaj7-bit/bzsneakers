@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Facebook, Phone, Mail, MapPin } from 'lucide-react';
+import { Instagram, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container py-12">
@@ -42,10 +37,10 @@ const Footer = () => {
             <h4 className="font-display text-lg">Linqe të Shpejta</h4>
             <ul className="space-y-2 text-sm opacity-80">
               <li><Link to="/" className="hover:opacity-100 transition-opacity">Ballina</Link></li>
-              <li><button onClick={() => scrollToSection('produkte')} className="hover:opacity-100 transition-opacity">Të gjitha produktet</button></li>
-              <li><button onClick={() => scrollToSection('meshkuj')} className="hover:opacity-100 transition-opacity">Meshkuj</button></li>
-              <li><button onClick={() => scrollToSection('femra')} className="hover:opacity-100 transition-opacity">Femra</button></li>
-              <li><button onClick={() => scrollToSection('zbritje')} className="hover:opacity-100 transition-opacity">Zbritje</button></li>
+              <li><Link to="/category/te-gjitha" className="hover:opacity-100 transition-opacity">Të gjitha produktet</Link></li>
+              <li><Link to="/category/meshkuj" className="hover:opacity-100 transition-opacity">Meshkuj</Link></li>
+              <li><Link to="/category/femra" className="hover:opacity-100 transition-opacity">Femra</Link></li>
+              <li><Link to="/category/zbritje" className="hover:opacity-100 transition-opacity">Zbritje</Link></li>
             </ul>
           </div>
 

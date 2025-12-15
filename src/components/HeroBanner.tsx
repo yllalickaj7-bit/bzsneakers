@@ -1,15 +1,8 @@
 import { ChevronRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const HeroBanner = () => {
-  const navigate = useNavigate();
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section className="relative overflow-hidden bg-primary text-primary-foreground">
       <div className="container py-16 md:py-24 lg:py-32">
@@ -28,22 +21,24 @@ const HeroBanner = () => {
               çmimet duke filluar nga vetëm <span className="font-bold">29.99€</span>!
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button 
-                size="lg" 
-                className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold uppercase tracking-wide"
-                onClick={() => scrollToSection('produkte')}
-              >
-                Shiko Koleksionin
-                <ChevronRight className="ml-2" size={20} />
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold uppercase tracking-wide"
-                onClick={() => scrollToSection('produkte-reja')}
-              >
-                Produkte të Reja
-              </Button>
+              <Link to="/category/te-gjitha">
+                <Button 
+                  size="lg" 
+                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold uppercase tracking-wide"
+                >
+                  Shiko Koleksionin
+                  <ChevronRight className="ml-2" size={20} />
+                </Button>
+              </Link>
+              <Link to="/category/te-reja">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold uppercase tracking-wide"
+                >
+                  Produkte të Reja
+                </Button>
+              </Link>
             </div>
           </div>
 

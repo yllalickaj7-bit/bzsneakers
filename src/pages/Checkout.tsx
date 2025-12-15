@@ -207,7 +207,7 @@ Faleminderit për porosinë tuaj!`;
                       className="flex gap-3 pb-4 border-b border-border"
                     >
                       <img 
-                        src={item.product.image} 
+                        src={item.product.images[0]} 
                         alt={item.product.name}
                         className="w-16 h-16 object-cover rounded"
                       />

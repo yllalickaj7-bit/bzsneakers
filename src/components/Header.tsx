@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ShoppingBag, Heart, Search, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
@@ -7,22 +7,7 @@ import { useCart } from '@/contexts/CartContext';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { getTotalItems, setIsCartOpen } = useCart();
-  const navigate = useNavigate();
   const cartCount = getTotalItems();
-
-  const scrollToSection = (sectionId: string) => {
-    setIsMenuOpen(false);
-    if (window.location.pathname !== '/') {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        element?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      const element = document.getElementById(sectionId);
-      element?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -55,10 +40,10 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link to="/" className="nav-link">Ballina</Link>
-            <button onClick={() => scrollToSection('produkte')} className="nav-link">Atlete</button>
-            <button onClick={() => scrollToSection('meshkuj')} className="nav-link">Meshkuj</button>
-            <button onClick={() => scrollToSection('femra')} className="nav-link">Femra</button>
-            <button onClick={() => scrollToSection('zbritje')} className="nav-link text-[hsl(var(--sale))]">Zbritje</button>
+            <Link to="/category/te-gjitha" className="nav-link">Atlete</Link>
+            <Link to="/category/meshkuj" className="nav-link">Meshkuj</Link>
+            <Link to="/category/femra" className="nav-link">Femra</Link>
+            <Link to="/category/zbritje" className="nav-link text-[hsl(var(--sale))]">Zbritje</Link>
           </nav>
 
           {/* Actions */}
@@ -94,10 +79,10 @@ const Header = () => {
         <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border animate-fade-in">
           <nav className="container py-4 flex flex-col gap-4">
             <Link to="/" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Ballina</Link>
-            <button onClick={() => scrollToSection('produkte')} className="nav-link py-2 text-left">Atlete</button>
-            <button onClick={() => scrollToSection('meshkuj')} className="nav-link py-2 text-left">Meshkuj</button>
-            <button onClick={() => scrollToSection('femra')} className="nav-link py-2 text-left">Femra</button>
-            <button onClick={() => scrollToSection('zbritje')} className="nav-link py-2 text-left text-[hsl(var(--sale))]">Zbritje</button>
+            <Link to="/category/te-gjitha" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Atlete</Link>
+            <Link to="/category/meshkuj" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Meshkuj</Link>
+            <Link to="/category/femra" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Femra</Link>
+            <Link to="/category/zbritje" className="nav-link py-2 text-[hsl(var(--sale))]" onClick={() => setIsMenuOpen(false)}>Zbritje</Link>
           </nav>
         </div>
       )}
