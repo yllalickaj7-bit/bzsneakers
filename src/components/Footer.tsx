@@ -1,6 +1,12 @@
+import { Link } from 'react-router-dom';
 import { Instagram, Facebook, Phone, Mail, MapPin } from 'lucide-react';
 
 const Footer = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container py-12">
@@ -21,10 +27,12 @@ const Footer = () => {
                 <Instagram size={24} />
               </a>
               <a 
-                href="#" 
+                href="https://wa.me/38343502651" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:opacity-70 transition-opacity"
               >
-                <Facebook size={24} />
+                <Phone size={24} />
               </a>
             </div>
           </div>
@@ -33,11 +41,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-display text-lg">Linqe të Shpejta</h4>
             <ul className="space-y-2 text-sm opacity-80">
-              <li><a href="#" className="hover:opacity-100 transition-opacity">Ballina</a></li>
-              <li><a href="#produkte" className="hover:opacity-100 transition-opacity">Të gjitha produktet</a></li>
-              <li><a href="#meshkuj" className="hover:opacity-100 transition-opacity">Meshkuj</a></li>
-              <li><a href="#femra" className="hover:opacity-100 transition-opacity">Femra</a></li>
-              <li><a href="#zbritje" className="hover:opacity-100 transition-opacity">Zbritje</a></li>
+              <li><Link to="/" className="hover:opacity-100 transition-opacity">Ballina</Link></li>
+              <li><button onClick={() => scrollToSection('produkte')} className="hover:opacity-100 transition-opacity">Të gjitha produktet</button></li>
+              <li><button onClick={() => scrollToSection('meshkuj')} className="hover:opacity-100 transition-opacity">Meshkuj</button></li>
+              <li><button onClick={() => scrollToSection('femra')} className="hover:opacity-100 transition-opacity">Femra</button></li>
+              <li><button onClick={() => scrollToSection('zbritje')} className="hover:opacity-100 transition-opacity">Zbritje</button></li>
             </ul>
           </div>
 
@@ -45,10 +53,10 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-display text-lg">Shërbimi i Klientit</h4>
             <ul className="space-y-2 text-sm opacity-80">
-              <li><a href="#" className="hover:opacity-100 transition-opacity">Rreth nesh</a></li>
-              <li><a href="#" className="hover:opacity-100 transition-opacity">Politikat e kthimit</a></li>
-              <li><a href="#" className="hover:opacity-100 transition-opacity">Dërgesa</a></li>
-              <li><a href="#" className="hover:opacity-100 transition-opacity">Pyetje të shpeshta</a></li>
+              <li><a href="https://wa.me/38343502651" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity">Na Kontaktoni</a></li>
+              <li><span className="cursor-default">Politikat e kthimit</span></li>
+              <li><span className="cursor-default">Dërgesa Falas</span></li>
+              <li><span className="cursor-default">Pyetje të shpeshta</span></li>
             </ul>
           </div>
 
@@ -58,11 +66,15 @@ const Footer = () => {
             <ul className="space-y-3 text-sm opacity-80">
               <li className="flex items-center gap-2">
                 <Phone size={16} />
-                <span>+383 44 XXX XXX</span>
+                <a href="https://wa.me/38343502651" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity">
+                  +383 43 502 651
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail size={16} />
-                <span>info@bzsneakers.com</span>
+                <Instagram size={16} />
+                <a href="https://instagram.com/bz.sneakerss" target="_blank" rel="noopener noreferrer" className="hover:opacity-100 transition-opacity">
+                  @bz.sneakerss
+                </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={16} className="mt-0.5" />

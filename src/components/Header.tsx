@@ -1,10 +1,28 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Heart, Search, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCart } from '@/contexts/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartCount] = useState(0);
+  const { getTotalItems, setIsCartOpen } = useCart();
+  const navigate = useNavigate();
+  const cartCount = getTotalItems();
+
+  const scrollToSection = (sectionId: string) => {
+    setIsMenuOpen(false);
+    if (window.location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -28,19 +46,19 @@ const Header = () => {
           </button>
 
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <span className="font-display text-2xl md:text-3xl tracking-wider">
               BZ SNEAKERS
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="/" className="nav-link">Ballina</a>
-            <a href="#produkte" className="nav-link">Atlete</a>
-            <a href="#meshkuj" className="nav-link">Meshkuj</a>
-            <a href="#femra" className="nav-link">Femra</a>
-            <a href="#zbritje" className="nav-link text-sale">Zbritje</a>
+            <Link to="/" className="nav-link">Ballina</Link>
+            <button onClick={() => scrollToSection('produkte')} className="nav-link">Atlete</button>
+            <button onClick={() => scrollToSection('meshkuj')} className="nav-link">Meshkuj</button>
+            <button onClick={() => scrollToSection('femra')} className="nav-link">Femra</button>
+            <button onClick={() => scrollToSection('zbritje')} className="nav-link text-[hsl(var(--sale))]">Zbritje</button>
           </nav>
 
           {/* Actions */}
@@ -54,10 +72,15 @@ const Header = () => {
             <Button variant="ghost" size="icon">
               <Heart size={20} />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative"
+              onClick={() => setIsCartOpen(true)}
+            >
               <ShoppingBag size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-sale text-sale-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-[hsl(var(--sale))] text-[hsl(var(--sale-foreground))] text-xs w-5 h-5 rounded-full flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
@@ -70,11 +93,11 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border animate-fade-in">
           <nav className="container py-4 flex flex-col gap-4">
-            <a href="/" className="nav-link py-2">Ballina</a>
-            <a href="#produkte" className="nav-link py-2">Atlete</a>
-            <a href="#meshkuj" className="nav-link py-2">Meshkuj</a>
-            <a href="#femra" className="nav-link py-2">Femra</a>
-            <a href="#zbritje" className="nav-link py-2 text-sale">Zbritje</a>
+            <Link to="/" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Ballina</Link>
+            <button onClick={() => scrollToSection('produkte')} className="nav-link py-2 text-left">Atlete</button>
+            <button onClick={() => scrollToSection('meshkuj')} className="nav-link py-2 text-left">Meshkuj</button>
+            <button onClick={() => scrollToSection('femra')} className="nav-link py-2 text-left">Femra</button>
+            <button onClick={() => scrollToSection('zbritje')} className="nav-link py-2 text-left text-[hsl(var(--sale))]">Zbritje</button>
           </nav>
         </div>
       )}

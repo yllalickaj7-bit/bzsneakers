@@ -1,26 +1,31 @@
-const categories = [
-  {
-    name: 'Meshkuj',
-    image: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=700&h=500&fit=crop',
-    link: '#meshkuj',
-  },
-  {
-    name: 'Femra',
-    image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&h=500&fit=crop',
-    link: '#femra',
-  },
-];
-
 const CategoryCards = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const categories = [
+    {
+      name: 'Meshkuj',
+      image: 'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=700&h=500&fit=crop',
+      sectionId: 'meshkuj',
+    },
+    {
+      name: 'Femra',
+      image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&h=500&fit=crop',
+      sectionId: 'femra',
+    },
+  ];
+
   return (
     <section className="py-16" id="kategori">
       <div className="container">
         <div className="grid md:grid-cols-2 gap-6">
           {categories.map((category) => (
-            <a
+            <button
               key={category.name}
-              href={category.link}
-              className="category-card aspect-[7/5] rounded-lg overflow-hidden"
+              onClick={() => scrollToSection(category.sectionId)}
+              className="category-card aspect-[7/5] rounded-lg overflow-hidden group"
             >
               <img
                 src={category.image}
@@ -33,7 +38,7 @@ const CategoryCards = () => {
                   {category.name}
                 </h3>
               </div>
-            </a>
+            </button>
           ))}
         </div>
       </div>

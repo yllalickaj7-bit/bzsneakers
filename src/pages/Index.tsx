@@ -20,8 +20,14 @@ const Index = () => {
         <ProductSection 
           title="Produkte të Reja" 
           products={newProducts.slice(0, 4)} 
-          id="produkte"
+          id="produkte-reja"
         />
+        <div id="produkte">
+          <ProductSection 
+            title="Të gjitha Atletet" 
+            products={saleProducts.slice(0, 4)} 
+          />
+        </div>
         <ProductSection 
           title="Produkte me Zbritje" 
           products={saleProducts.slice(0, 8)} 
