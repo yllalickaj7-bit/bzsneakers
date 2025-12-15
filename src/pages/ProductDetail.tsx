@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus } from 'lucide-react';
+import { ChevronLeft, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { products } from '@/data/products';
+import { getProductById, products } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -11,23 +11,15 @@ import { toast } from 'sonner';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const product = products.find(p => p.id === id);
+  const product = getProductById(id || '');
   const { addToCart } = useCart();
   
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
-  // Generate multiple images for the product
-  const productImages = product ? [
-    product.image,
-    product.image.replace('w=600', 'w=800'),
-    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop',
-    'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=600&h=600&fit=crop',
-  ] : [];
-
   const relatedProducts = products
-    .filter(p => p.id !== id && p.brand === product?.brand)
+    .filter(p => p.id !== id && p.brand === product?.brand && p.stock > 0)
     .slice(0, 4);
 
   if (!product) {
@@ -47,9 +39,22 @@ const ProductDetail = () => {
     );
   }
 
+  const isOutOfStock = product.stock === 0;
+  const maxQuantity = Math.min(product.stock, 10);
+
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast.error('Ky produkt nuk është në dispozicion');
+      return;
+    }
+    
     if (!selectedSize) {
       toast.error('Ju lutem zgjidhni madhësinë');
+      return;
+    }
+
+    if (quantity > product.stock) {
+      toast.error(`Vetëm ${product.stock} copë në dispozicion`);
       return;
     }
     
@@ -78,38 +83,47 @@ const ProductDetail = () => {
             {/* Images */}
             <div className="space-y-4">
               {/* Main Image */}
-              <div className="aspect-square bg-secondary rounded-lg overflow-hidden">
+              <div className="aspect-square bg-secondary rounded-lg overflow-hidden relative">
                 <img 
-                  src={productImages[activeImage]} 
+                  src={product.images[activeImage]} 
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
+                {isOutOfStock && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded font-bold">
+                      I SHITUR
+                    </span>
+                  </div>
+                )}
               </div>
               
               {/* Thumbnails */}
-              <div className="grid grid-cols-4 gap-3">
-                {productImages.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveImage(index)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      activeImage === index ? 'border-primary' : 'border-transparent hover:border-muted-foreground'
-                    }`}
-                  >
-                    <img 
-                      src={img} 
-                      alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
+              {product.images.length > 1 && (
+                <div className="grid grid-cols-4 gap-3">
+                  {product.images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveImage(index)}
+                      className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                        activeImage === index ? 'border-primary' : 'border-transparent hover:border-muted-foreground'
+                      }`}
+                    >
+                      <img 
+                        src={img} 
+                        alt={`${product.name} ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Product Info */}
             <div className="space-y-6">
               {/* Brand & Badges */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm text-muted-foreground uppercase tracking-wider">
                   {product.brand}
                 </span>
@@ -123,6 +137,11 @@ const ProductDetail = () => {
                     E RE
                   </span>
                 )}
+                {isOutOfStock && (
+                  <span className="bg-destructive text-destructive-foreground px-2 py-1 text-xs font-bold rounded">
+                    I SHITUR
+                  </span>
+                )}
               </div>
 
               {/* Title */}
@@ -132,6 +151,18 @@ const ProductDetail = () => {
               <p className="text-muted-foreground capitalize">
                 {product.category === 'meshkuj' ? 'Meshkuj' : 'Femra'}
               </p>
+
+              {/* Stock Info */}
+              {!isOutOfStock && (
+                <p className="text-sm flex items-center gap-2">
+                  <span className={`w-2 h-2 rounded-full ${product.stock <= 5 ? 'bg-orange-500' : 'bg-success'}`}></span>
+                  {product.stock <= 5 ? (
+                    <span className="text-orange-600">Vetëm {product.stock} copë të mbetura!</span>
+                  ) : (
+                    <span className="text-muted-foreground">{product.stock} copë në dispozicion</span>
+                  )}
+                </p>
+              )}
 
               {/* Price */}
               <div className="flex items-center gap-4">
@@ -158,10 +189,11 @@ const ProductDetail = () => {
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
+                      disabled={isOutOfStock}
                       className={`py-3 rounded-lg border-2 font-medium transition-all ${
                         selectedSize === size 
                           ? 'border-primary bg-primary text-primary-foreground' 
-                          : 'border-border hover:border-primary'
+                          : 'border-border hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed'
                       }`}
                     >
                       {size}
@@ -178,6 +210,7 @@ const ProductDetail = () => {
                     variant="outline" 
                     size="icon"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    disabled={isOutOfStock}
                   >
                     <Minus size={18} />
                   </Button>
@@ -185,7 +218,8 @@ const ProductDetail = () => {
                   <Button 
                     variant="outline" 
                     size="icon"
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
+                    disabled={isOutOfStock || quantity >= maxQuantity}
                   >
                     <Plus size={18} />
                   </Button>
@@ -198,8 +232,9 @@ const ProductDetail = () => {
                   size="lg" 
                   className="flex-1"
                   onClick={handleAddToCart}
+                  disabled={isOutOfStock}
                 >
-                  SHTO NË SHPORTË
+                  {isOutOfStock ? 'I SHITUR' : 'SHTO NË SHPORTË'}
                 </Button>
                 <Button variant="outline" size="lg">
                   <Heart size={20} />
@@ -229,9 +264,7 @@ const ProductDetail = () => {
               <div className="space-y-3 pt-6 border-t border-border">
                 <h3 className="font-display text-lg">PËRSHKRIMI</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Këpucë sportive me cilësi të lartë nga {product.brand}. 
-                  Dizajn modern dhe komod për përdorim të përditshëm. 
-                  Materiale të zgjedhura që garantojnë qëndrueshmëri dhe rehati maksimale.
+                  {product.description || `Këpucë sportive me cilësi të lartë nga ${product.brand}. Dizajn modern dhe komod për përdorim të përditshëm. Materiale të zgjedhura që garantojnë qëndrueshmëri dhe rehati maksimale.`}
                 </p>
               </div>
             </div>

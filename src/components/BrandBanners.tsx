@@ -1,4 +1,5 @@
 import { ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const brands = [
   {
@@ -25,20 +26,15 @@ const brands = [
 ];
 
 const BrandBanners = () => {
-  const scrollToSection = () => {
-    const element = document.getElementById('produkte');
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section className="py-12 bg-secondary">
       <div className="container">
         <div className="grid md:grid-cols-3 gap-6">
           {brands.map((brand, index) => (
-            <button
+            <Link
               key={brand.name}
-              onClick={scrollToSection}
-              className="group relative overflow-hidden rounded-lg cursor-pointer h-64 w-full text-left"
+              to="/category/te-gjitha"
+              className="group relative overflow-hidden rounded-lg cursor-pointer h-64 block"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <img
@@ -56,7 +52,7 @@ const BrandBanners = () => {
                   <ChevronRight size={16} />
                 </div>
               </div>
-            </button>
+            </Link>
           ))}
         </div>
       </div>

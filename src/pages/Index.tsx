@@ -20,30 +20,24 @@ const Index = () => {
         <ProductSection 
           title="Produkte të Reja" 
           products={newProducts.slice(0, 4)} 
-          id="produkte-reja"
+          viewAllLink="/category/te-reja"
         />
-        <div id="produkte">
-          <ProductSection 
-            title="Të gjitha Atletet" 
-            products={saleProducts.slice(0, 4)} 
-          />
-        </div>
         <ProductSection 
           title="Produkte me Zbritje" 
           products={saleProducts.slice(0, 8)} 
-          id="zbritje"
+          viewAllLink="/category/zbritje"
         />
         <div className="bg-secondary py-2">
           <ProductSection 
             title="Për Meshkuj" 
             products={menProducts.slice(0, 4)} 
-            id="meshkuj"
+            viewAllLink="/category/meshkuj"
           />
         </div>
         <ProductSection 
           title="Për Femra" 
           products={womenProducts.slice(0, 4)} 
-          id="femra"
+          viewAllLink="/category/femra"
         />
         <Newsletter />
       </main>
