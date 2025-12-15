@@ -25,14 +25,20 @@ const brands = [
 ];
 
 const BrandBanners = () => {
+  const scrollToSection = () => {
+    const element = document.getElementById('produkte');
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section className="py-12 bg-secondary">
       <div className="container">
         <div className="grid md:grid-cols-3 gap-6">
           {brands.map((brand, index) => (
-            <div
+            <button
               key={brand.name}
-              className="group relative overflow-hidden rounded-lg cursor-pointer h-64"
+              onClick={scrollToSection}
+              className="group relative overflow-hidden rounded-lg cursor-pointer h-64 w-full text-left"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <img
@@ -50,7 +56,7 @@ const BrandBanners = () => {
                   <ChevronRight size={16} />
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
