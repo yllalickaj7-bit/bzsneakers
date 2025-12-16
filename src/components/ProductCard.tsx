@@ -1,6 +1,8 @@
 import { Heart, Eye, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useWishlist } from '@/contexts/WishlistContext';
+import { toast } from 'sonner';
 import type { Product } from '@/data/products';
 
 interface ProductCardProps {
@@ -9,6 +11,14 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const isOutOfStock = product.stock === 0;
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const inWishlist = isInWishlist(product.id);
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    toggleWishlist(product);
+    toast.success(inWishlist ? 'U hoq nga të preferuarat' : 'U shtua në të preferuarat');
+  };
 
   return (
     <Link to={`/product/${product.id}`} className="block">
@@ -18,7 +28,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="sale-badge">-{product.discount}%</span>
           )}
           {product.isNew && !product.discount && !isOutOfStock && (
-            <span className="absolute top-3 left-3 bg-success text-primary-foreground px-2 py-1 text-xs font-bold rounded">
+            <span className="absolute top-3 left-3 bg-gold text-primary px-2 py-1 text-xs font-bold rounded">
               E RE
             </span>
           )}
@@ -38,10 +48,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <Button 
                 size="icon" 
                 variant="secondary" 
-                className="rounded-full"
-                onClick={(e) => e.preventDefault()}
+                className={`rounded-full ${inWishlist ? 'bg-gold text-primary hover:bg-gold/90' : ''}`}
+                onClick={handleWishlistClick}
               >
-                <Heart size={18} />
+                <Heart size={18} fill={inWishlist ? 'currentColor' : 'none'} />
               </Button>
               <Button 
                 size="icon" 
@@ -63,7 +73,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           )}
         </div>
         <div className="p-4 space-y-2">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider">
+          <p className="text-xs text-gold uppercase tracking-wider font-semibold">
             {product.brand}
           </p>
           <h3 className="font-medium text-sm line-clamp-2 min-h-[2.5rem]">
@@ -76,7 +86,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             {product.originalPrice !== product.currentPrice && (
               <span className="price-original">{product.originalPrice.toFixed(2)}€</span>
             )}
-            <span className="price-current">{product.currentPrice.toFixed(2)}€</span>
+            <span className="price-current text-gold">{product.currentPrice.toFixed(2)}€</span>
           </div>
           {product.stock > 0 && product.stock <= 5 && (
             <p className="text-xs text-orange-600">Vetëm {product.stock} copë!</p>

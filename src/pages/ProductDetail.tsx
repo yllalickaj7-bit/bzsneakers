@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getProductById, products } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
@@ -13,6 +14,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const product = getProductById(id || '');
   const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
   
   const [selectedSize, setSelectedSize] = useState<number | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -124,16 +126,16 @@ const ProductDetail = () => {
             <div className="space-y-6">
               {/* Brand & Badges */}
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-sm text-muted-foreground uppercase tracking-wider">
+                <span className="text-sm text-gold uppercase tracking-wider font-semibold">
                   {product.brand}
                 </span>
                 {product.discount > 0 && (
-                  <span className="bg-[hsl(var(--sale))] text-[hsl(var(--sale-foreground))] px-2 py-1 text-xs font-bold rounded">
+                  <span className="bg-sale text-sale-foreground px-2 py-1 text-xs font-bold rounded">
                     -{product.discount}%
                   </span>
                 )}
                 {product.isNew && (
-                  <span className="bg-success text-primary-foreground px-2 py-1 text-xs font-bold rounded">
+                  <span className="bg-gold text-primary px-2 py-1 text-xs font-bold rounded">
                     E RE
                   </span>
                 )}
@@ -155,9 +157,9 @@ const ProductDetail = () => {
               {/* Stock Info */}
               {!isOutOfStock && (
                 <p className="text-sm flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${product.stock <= 5 ? 'bg-orange-500' : 'bg-success'}`}></span>
+                  <span className={`w-2 h-2 rounded-full ${product.stock <= 5 ? 'bg-gold' : 'bg-success'}`}></span>
                   {product.stock <= 5 ? (
-                    <span className="text-orange-600">Vetëm {product.stock} copë të mbetura!</span>
+                    <span className="text-gold">Vetëm {product.stock} copë të mbetura!</span>
                   ) : (
                     <span className="text-muted-foreground">{product.stock} copë në dispozicion</span>
                   )}
@@ -171,7 +173,7 @@ const ProductDetail = () => {
                     {product.originalPrice.toFixed(2)}€
                   </span>
                 )}
-                <span className="text-3xl font-bold text-foreground">
+                <span className="text-3xl font-bold text-gold">
                   {product.currentPrice.toFixed(2)}€
                 </span>
               </div>
@@ -230,14 +232,22 @@ const ProductDetail = () => {
               <div className="flex gap-4">
                 <Button 
                   size="lg" 
-                  className="flex-1"
+                  className="flex-1 bg-gold text-primary hover:bg-gold/90"
                   onClick={handleAddToCart}
                   disabled={isOutOfStock}
                 >
                   {isOutOfStock ? 'I SHITUR' : 'SHTO NË SHPORTË'}
                 </Button>
-                <Button variant="outline" size="lg">
-                  <Heart size={20} />
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => {
+                    toggleWishlist(product);
+                    toast.success(isInWishlist(product.id) ? 'U hoq nga të preferuarat' : 'U shtua në të preferuarat');
+                  }}
+                  className={isInWishlist(product.id) ? 'bg-gold text-primary border-gold hover:bg-gold/90' : ''}
+                >
+                  <Heart size={20} fill={isInWishlist(product.id) ? 'currentColor' : 'none'} />
                 </Button>
                 <Button variant="outline" size="lg">
                   <Share2 size={20} />

@@ -1,34 +1,45 @@
 /**
+ * ============================================
  * PRODUKTET - BZ SNEAKERS
+ * ============================================
  * 
- * Për të shtuar produkt të ri:
- * 1. Kopjo një objekt ekzistues dhe ndryshoje
- * 2. Sigurohu që ID të jetë unike
- * 3. Shto fotot në array-n "images"
- * 4. Vendos "stock" për sasinë në dispozicion
+ * SI TË SHTOSH PRODUKT TË RI:
+ * 1. Kopjo një objekt ekzistues më poshtë
+ * 2. Ndrysho ID-në (duhet të jetë unike, p.sh. '13', '14', etj.)
+ * 3. Ndrysho emrin, markën, kategorinë
+ * 4. Vendos çmimet:
+ *    - originalPrice: çmimi i vjetër (para zbritjes)
+ *    - currentPrice: çmimi aktual (pas zbritjes)
+ *    - discount: përqindja e zbritjes (llogaritet automatikisht: (originalPrice - currentPrice) / originalPrice * 100)
+ * 5. Shto fotot në "images" array (foto e parë shfaqet kryesore)
+ * 6. Vendos madhësitë në "sizes"
+ * 7. Vendos sasinë në "stock" (0 = i shitur)
+ * 8. isNew: true/false - për badge "E RE"
+ * 9. isSale: true/false - për të shfaqur në faqen e zbritjeve
  * 
- * Për të hequr produkt:
- * - Fshije objektin nga lista
+ * SI TË NDRYSHOSH ÇMIMIN:
+ * - Gjej produktin dhe ndrysho "currentPrice"
+ * - Nëse ka zbritje, ndrysho edhe "discount" përqindjen
  * 
- * Për të ndryshuar sasinë:
- * - Ndrysho vlerën e "stock"
- * - Vendos 0 nëse produkti është i shitur
+ * SI TË HEQËSH PRODUKT:
+ * - Fshije tërë objektin nga lista, ose
+ * - Vendos stock: 0 për ta shënuar si "I SHITUR"
  */
 
 export interface Product {
-  id: string;
-  name: string;
-  brand: string;
-  category: 'meshkuj' | 'femra' | 'femije'; // Kategoritë e mundshme
-  originalPrice: number;
-  currentPrice: number;
-  discount: number;
-  images: string[]; // Lista e fotove - foto e parë është kryesore
-  sizes: number[];
-  stock: number; // Sasia në dispozicion - vendos 0 nëse s'ka
-  isNew?: boolean;
-  isSale?: boolean;
-  description?: string;
+  id: string;                        // ID unike (p.sh. '1', '2', '3')
+  name: string;                      // Emri i produktit
+  brand: string;                     // Marka (Nike, Adidas, etj.)
+  category: 'meshkuj' | 'femra' | 'femije';  // Kategoria
+  originalPrice: number;             // Çmimi origjinal (para zbritjes)
+  currentPrice: number;              // Çmimi aktual (pas zbritjes)
+  discount: number;                  // Përqindja e zbritjes (p.sh. 60 = -60%)
+  images: string[];                  // Lista e fotove - foto e parë shfaqet kryesore
+  sizes: number[];                   // Madhësitë në dispozicion
+  stock: number;                     // Sasia në dispozicion (0 = i shitur)
+  isNew?: boolean;                   // true = shfaq badge "E RE"
+  isSale?: boolean;                  // true = shfaq në faqen e zbritjeve
+  description?: string;              // Përshkrimi i produktit
 }
 
 export const products: Product[] = [
