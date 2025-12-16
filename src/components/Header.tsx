@@ -4,6 +4,7 @@ import { ShoppingBag, Heart, Search, Menu, X, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import SearchModal from './SearchModal';
 import {
   DropdownMenu,
@@ -18,7 +19,9 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { getTotalItems, setIsCartOpen } = useCart();
   const { user, signOut, loading } = useAuth();
+  const { wishlist } = useWishlist();
   const cartCount = getTotalItems();
+  const wishlistCount = wishlist.length;
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -30,7 +33,7 @@ const Header = () => {
     <>
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
         {/* Top bar */}
-        <div className="bg-primary text-primary-foreground py-2 text-center text-sm">
+        <div className="bg-gold text-primary py-2 text-center text-sm font-semibold">
           <p className="animate-pulse-soft">
             🎉 ZBRITJET E FUNDVITIT - Deri në <span className="font-bold">70% OFF</span> 🎉
           </p>
@@ -105,8 +108,13 @@ const Header = () => {
                 )
               )}
               
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="relative">
                 <Heart size={20} />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gold text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+                    {wishlistCount}
+                  </span>
+                )}
               </Button>
               <Button 
                 variant="ghost" 

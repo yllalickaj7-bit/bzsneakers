@@ -152,12 +152,16 @@
     @apply text-3xl md:text-4xl font-display uppercase tracking-wider;
   }
 
+  .section-title-gold {
+    @apply text-gold;
+  }
+
   .price-original {
     @apply line-through text-muted-foreground text-sm;
   }
 
   .price-current {
-    @apply text-lg font-bold text-foreground;
+    @apply text-lg font-bold text-gold;
   }
 
   .btn-primary {

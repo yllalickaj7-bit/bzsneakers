@@ -23,10 +23,12 @@ const ProductSection = ({
     <section className="py-12 md:py-16" id={id}>
       <div className="container">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="section-title">{title}</h2>
+          <h2 className="section-title">
+            <span className="text-gold">{title.split(' ')[0]}</span> {title.split(' ').slice(1).join(' ')}
+          </h2>
           {showViewAll && (
             <Link to={viewAllLink}>
-              <Button variant="ghost" className="hidden md:flex items-center gap-2 uppercase tracking-wider text-sm">
+              <Button variant="ghost" className="hidden md:flex items-center gap-2 uppercase tracking-wider text-sm text-gold hover:text-gold/80">
                 Shiko të gjitha
                 <ChevronRight size={18} />
               </Button>
@@ -47,7 +49,7 @@ const ProductSection = ({
         {showViewAll && (
           <div className="mt-8 text-center md:hidden">
             <Link to={viewAllLink}>
-              <Button variant="outline" className="uppercase tracking-wider">
+              <Button variant="outline" className="uppercase tracking-wider border-gold text-gold hover:bg-gold hover:text-primary">
                 Shiko të gjitha
                 <ChevronRight size={18} className="ml-2" />
               </Button>
