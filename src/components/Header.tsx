@@ -1,15 +1,30 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ShoppingBag, Heart, Search, Menu, X, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ShoppingBag, Heart, Search, Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 import SearchModal from './SearchModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { toast } from 'sonner';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { getTotalItems, setIsCartOpen } = useCart();
+  const { user, signOut, loading } = useAuth();
   const cartCount = getTotalItems();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success('Ju u çkyçët me sukses');
+  };
 
   return (
     <>
@@ -58,9 +73,38 @@ const Header = () => {
               >
                 <Search size={20} />
               </Button>
-              <Button variant="ghost" size="icon" className="hidden md:flex">
-                <User size={20} />
-              </Button>
+              
+              {/* User Account */}
+              {!loading && (
+                user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="relative">
+                        <User size={20} />
+                        <span className="absolute -top-1 -right-1 bg-green-500 w-3 h-3 rounded-full border-2 border-background"></span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem className="text-sm text-muted-foreground">
+                        {user.email}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-red-600">
+                        <LogOut size={16} className="mr-2" />
+                        Çkyçu
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => navigate('/auth')}
+                  >
+                    <User size={20} />
+                  </Button>
+                )
+              )}
+              
               <Button variant="ghost" size="icon">
                 <Heart size={20} />
               </Button>
@@ -90,6 +134,16 @@ const Header = () => {
               <Link to="/category/meshkuj" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Meshkuj</Link>
               <Link to="/category/femra" className="nav-link py-2" onClick={() => setIsMenuOpen(false)}>Femra</Link>
               <Link to="/category/zbritje" className="nav-link py-2 text-[hsl(var(--sale))]" onClick={() => setIsMenuOpen(false)}>Zbritje</Link>
+              {!user && (
+                <Link to="/auth" className="nav-link py-2 font-semibold text-primary" onClick={() => setIsMenuOpen(false)}>
+                  Kyçu / Regjistrohu
+                </Link>
+              )}
+              {user && (
+                <button onClick={handleSignOut} className="nav-link py-2 text-left text-red-600">
+                  Çkyçu
+                </button>
+              )}
             </nav>
           </div>
         )}
