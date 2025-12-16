@@ -24,7 +24,7 @@ const HeroBanner = () => {
               <Link to="/category/te-gjitha">
                 <Button 
                   size="lg" 
-                  className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold uppercase tracking-wide"
+                  className="bg-background text-foreground hover:bg-background/90 font-semibold uppercase tracking-wide shadow-lg"
                 >
                   Shiko Koleksionin
                   <ChevronRight className="ml-2" size={20} />
@@ -33,8 +33,7 @@ const HeroBanner = () => {
               <Link to="/category/te-reja">
                 <Button 
                   size="lg" 
-                  variant="outline" 
-                  className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary font-semibold uppercase tracking-wide"
+                  className="bg-transparent border-2 border-background text-background hover:bg-background hover:text-foreground font-semibold uppercase tracking-wide"
                 >
                   Produkte të Reja
                 </Button>
@@ -46,7 +45,7 @@ const HeroBanner = () => {
           <div className="relative animate-slide-in-right hidden lg:block">
             <div className="relative z-10">
               <img
-                src="https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=800&h=600&fit=crop"
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=600&fit=crop"
                 alt="Featured Sneaker"
                 className="w-full h-auto rounded-lg shadow-2xl transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500"
               />
