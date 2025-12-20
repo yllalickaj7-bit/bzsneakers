@@ -2,7 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import ProductCard from './ProductCard';
-import type { Product } from '@/data/products';
+import type { Product } from '@/hooks/useProducts';
 
 interface ProductSectionProps {
   title: string;
