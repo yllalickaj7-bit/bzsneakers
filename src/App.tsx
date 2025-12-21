@@ -14,6 +14,7 @@ import CategoryPage from "./pages/CategoryPage";
 import Checkout from "./pages/Checkout";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import AdminProducts from "./pages/AdminProducts";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/category/:category" element={<CategoryPage />} />
                 <Route path="/checkout" element={<Checkout />} />
+                <Route path="/admin/products" element={<AdminProducts />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
