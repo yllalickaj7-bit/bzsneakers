@@ -35,21 +35,40 @@ interface DBProduct {
 }
 
 // Transform database product to frontend product format
-const transformProduct = (dbProduct: DBProduct): Product => ({
-  id: dbProduct.id,
-  name: dbProduct.name,
-  brand: dbProduct.brand,
-  category: dbProduct.category,
-  originalPrice: Number(dbProduct.original_price),
-  currentPrice: Number(dbProduct.current_price),
-  discount: dbProduct.discount,
-  sizes: dbProduct.sizes.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)),
-  stock: dbProduct.stock,
-  images: dbProduct.images?.length ? dbProduct.images : [dbProduct.image_url],
-  description: dbProduct.description || '',
-  isNew: dbProduct.is_new,
-  isSale: dbProduct.is_sale,
-});
+const transformProduct = (dbProduct: DBProduct): Product => {
+  // Ensure images is always a valid array with at least one image
+  let imagesArray: string[] = [];
+  
+  if (Array.isArray(dbProduct.images) && dbProduct.images.length > 0) {
+    imagesArray = dbProduct.images.filter(img => img && typeof img === 'string');
+  }
+  
+  // Fallback to image_url if images array is empty
+  if (imagesArray.length === 0 && dbProduct.image_url) {
+    imagesArray = [dbProduct.image_url];
+  }
+  
+  // Final fallback to placeholder
+  if (imagesArray.length === 0) {
+    imagesArray = ['/placeholder.svg'];
+  }
+
+  return {
+    id: dbProduct.id,
+    name: dbProduct.name,
+    brand: dbProduct.brand,
+    category: dbProduct.category,
+    originalPrice: Number(dbProduct.original_price) || 0,
+    currentPrice: Number(dbProduct.current_price) || 0,
+    discount: dbProduct.discount || 0,
+    sizes: dbProduct.sizes ? dbProduct.sizes.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)) : [],
+    stock: dbProduct.stock || 0,
+    images: imagesArray,
+    description: dbProduct.description || '',
+    isNew: dbProduct.is_new || false,
+    isSale: dbProduct.is_sale || false,
+  };
+};
 
 // Fetch all products
 export const useProducts = () => {

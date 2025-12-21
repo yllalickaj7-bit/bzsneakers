@@ -18,7 +18,6 @@ export type Database = {
         Row: {
           brand: string
           category: string
-          created_at: string
           current_price: number
           description: string | null
           discount: number
@@ -31,12 +30,10 @@ export type Database = {
           original_price: number
           sizes: string
           stock: number
-          updated_at: string
         }
         Insert: {
           brand?: string
           category?: string
-          created_at?: string
           current_price: number
           description?: string | null
           discount?: number
@@ -49,12 +46,10 @@ export type Database = {
           original_price: number
           sizes?: string
           stock?: number
-          updated_at?: string
         }
         Update: {
           brand?: string
           category?: string
-          created_at?: string
           current_price?: number
           description?: string | null
           discount?: number
@@ -67,7 +62,6 @@ export type Database = {
           original_price?: number
           sizes?: string
           stock?: number
-          updated_at?: string
         }
         Relationships: []
       }
