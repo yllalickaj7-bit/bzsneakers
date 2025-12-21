@@ -13,7 +13,6 @@ const AdminProducts = () => {
     category: "meshkuj",
     original_price: 0,
     current_price: 0,
-    discount: 0,
     stock: 10,
     sizes: "38, 39, 40, 41, 42, 43, 44",
     image_url: "",
@@ -27,32 +26,31 @@ const AdminProducts = () => {
     e.preventDefault();
     setLoading(true);
 
-    const insertData = {
-      ...formData,
-      images: formData.images ? formData.images.split(",").map(s => s.trim()) : [],
-    };
+    const discount = formData.original_price > 0 
+      ? Math.round((formData.original_price - formData.current_price) / formData.original_price * 100) 
+      : 0;
 
-    const { error } = await supabase.from("products").insert([insertData]);
+    const { error } = await supabase.from("products").insert([{
+      name: formData.name,
+      brand: formData.brand,
+      category: formData.category,
+      original_price: formData.original_price,
+      current_price: formData.current_price,
+      discount,
+      stock: formData.stock,
+      sizes: formData.sizes,
+      image_url: formData.image_url,
+      images: formData.images ? formData.images.split(",").map(s => s.trim()) : [],
+      description: formData.description || null,
+      is_new: formData.is_new,
+      is_sale: formData.is_sale,
+    }]);
 
     if (error) {
       toast.error("Error: " + error.message);
     } else {
       toast.success("Product added!");
-      setFormData({
-        name: "",
-        brand: "Unknown",
-        category: "meshkuj",
-        original_price: 0,
-        current_price: 0,
-        discount: 0,
-        stock: 10,
-        sizes: "38, 39, 40, 41, 42, 43, 44",
-        image_url: "",
-        images: "",
-        description: "",
-        is_new: false,
-        is_sale: false,
-      });
+      setFormData({ name: "", brand: "Unknown", category: "meshkuj", original_price: 0, current_price: 0, stock: 10, sizes: "38, 39, 40, 41, 42, 43, 44", image_url: "", images: "", description: "", is_new: false, is_sale: false });
     }
     setLoading(false);
   };
@@ -83,15 +81,9 @@ const AdminProducts = () => {
             <Input type="number" value={formData.current_price} onChange={e => setFormData({...formData, current_price: Number(e.target.value)})} required />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Discount %</Label>
-            <Input type="number" value={formData.discount} onChange={e => setFormData({...formData, discount: Number(e.target.value)})} />
-          </div>
-          <div>
-            <Label>Stock</Label>
-            <Input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: Number(e.target.value)})} />
-          </div>
+        <div>
+          <Label>Stock</Label>
+          <Input type="number" value={formData.stock} onChange={e => setFormData({...formData, stock: Number(e.target.value)})} />
         </div>
         <div>
           <Label>Sizes (comma separated)</Label>
