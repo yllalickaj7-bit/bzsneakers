@@ -7,6 +7,29 @@ import { toast } from "sonner";
 
 const AdminProducts = () => {
   const [loading, setLoading] = useState(false);
+  const [seeding, setSeeding] = useState(false);
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    const { error } = await supabase.from("products").insert([{
+      name: "Nike Air Force 1 Kafe",
+      brand: "Nike",
+      category: "unisex",
+      original_price: 69.99,
+      current_price: 34.99,
+      discount: Math.round(((69.99 - 34.99) / 69.99) * 100),
+      sizes: "40, 41, 42, 43",
+      image_url: "https://iiegqbznjtbgzzfmmjur.supabase.co/storage/v1/object/public/media//1.png",
+      images: [],
+      description: "Nike Air Force 1 në ngjyrë kafe premium me material tekstil dhe lidhëse me kapëse metalike. Stil unisex i përshtatshëm për çdo veshje.",
+      stock: 50,
+      is_new: false,
+      is_sale: true,
+    }]);
+    if (error) toast.error("Error: " + error.message);
+    else toast.success("Seeded!");
+    setSeeding(false);
+  };
   const [formData, setFormData] = useState({
     name: "",
     brand: "Unknown",
@@ -57,7 +80,12 @@ const AdminProducts = () => {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Add Product</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Add Product</h1>
+        <Button onClick={handleSeed} disabled={seeding} variant="outline">
+          {seeding ? "Seeding..." : "Seed"}
+        </Button>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label>Name *</Label>
