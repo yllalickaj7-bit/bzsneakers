@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, Heart, Share2, Truck, Shield, RotateCcw, Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useProduct, useRelatedProducts } from '@/hooks/useProducts';
+import { getProductById, products } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import Header from '@/components/Header';
@@ -11,36 +10,9 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { toast } from 'sonner';
 
-const ProductDetailSkeleton = () => (
-  <div className="container pb-12">
-    <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-      <div className="space-y-4">
-        <Skeleton className="aspect-square rounded-lg" />
-        <div className="grid grid-cols-4 gap-3">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="aspect-square rounded-lg" />
-          ))}
-        </div>
-      </div>
-      <div className="space-y-6">
-        <Skeleton className="h-6 w-24" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-6 w-20" />
-        <Skeleton className="h-10 w-32" />
-        <div className="grid grid-cols-5 gap-2">
-          {[...Array(5)].map((_, i) => (
-            <Skeleton key={i} className="h-12 rounded-lg" />
-          ))}
-        </div>
-        <Skeleton className="h-12 w-full" />
-      </div>
-    </div>
-  </div>
-);
-
 const ProductDetail = () => {
   const { id } = useParams();
-  const { data: product, isLoading } = useProduct(id || '');
+  const product = getProductById(id || '');
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   
@@ -48,25 +20,9 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
-  const { data: relatedProducts } = useRelatedProducts(
-    product?.brand || '', 
-    product?.id || ''
-  );
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">
-          <div className="container py-4">
-            <Skeleton className="h-6 w-24" />
-          </div>
-          <ProductDetailSkeleton />
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const relatedProducts = products
+    .filter(p => p.id !== id && p.brand === product?.brand && p.stock > 0)
+    .slice(0, 4);
 
   if (!product) {
     return (
@@ -326,7 +282,7 @@ const ProductDetail = () => {
         </div>
 
         {/* Related Products */}
-        {relatedProducts && relatedProducts.length > 0 && (
+        {relatedProducts.length > 0 && (
           <section className="bg-secondary py-12">
             <div className="container">
               <h2 className="section-title mb-8">PRODUKTE TË NGJASHME</h2>

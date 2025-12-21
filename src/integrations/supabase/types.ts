@@ -14,57 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      products: {
-        Row: {
-          brand: string
-          category: string
-          current_price: number
-          description: string | null
-          discount: number
-          id: string
-          image_url: string
-          images: string[] | null
-          is_new: boolean
-          is_sale: boolean
-          name: string
-          original_price: number
-          sizes: string
-          stock: number
-        }
-        Insert: {
-          brand?: string
-          category?: string
-          current_price: number
-          description?: string | null
-          discount?: number
-          id?: string
-          image_url: string
-          images?: string[] | null
-          is_new?: boolean
-          is_sale?: boolean
-          name: string
-          original_price: number
-          sizes?: string
-          stock?: number
-        }
-        Update: {
-          brand?: string
-          category?: string
-          current_price?: number
-          description?: string | null
-          discount?: number
-          id?: string
-          image_url?: string
-          images?: string[] | null
-          is_new?: boolean
-          is_sale?: boolean
-          name?: string
-          original_price?: number
-          sizes?: string
-          stock?: number
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never

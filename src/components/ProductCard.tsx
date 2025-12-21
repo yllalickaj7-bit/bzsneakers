@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from 'sonner';
-import type { Product } from '@/hooks/useProducts';
+import type { Product } from '@/data/products';
 
 interface ProductCardProps {
   product: Product;
